@@ -30,5 +30,15 @@ services:
       - "4500"
     networks:
       - my-network
+  eventbus-service:
+      build: ./eventbus-service
+      volumes: 
+        - ./eventbus-service/:/usr/src/app/
+      ports:
+        - "7000:7000"
+      expose:
+        - "7000"
+      networks:
+      - my-network
 networks:
   my-network:

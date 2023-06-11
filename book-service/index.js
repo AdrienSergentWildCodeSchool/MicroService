@@ -1,11 +1,15 @@
 import express from 'express'
 import { bookService } from './routes/book-service.js'
-
-
+import { eventBus } from "../eventbus-service/index.js"
+console.log(authorService)
 const app = express()
 app.use(express.json())
 const port = 4400
+const handleCreatedBook = (book) => {
+    console.log(book, 'book')
+}
 
+// eventBus.subscribe("createdBookEvent", handleCreatedBook)
 app.get('/book/get', async (req,res) => {
     res.send(JSON.stringify(await bookService.getAllBooks()));
 })
@@ -26,6 +30,7 @@ app.delete('/book/delete/:id', async(req,res) => {
 
 app.post('/book/create', async(req,res) => {
     let createdBook = await bookService.createBook(req.body);
+    eventBus.publish("createdBookEvent", createdBook)
     res.send(JSON.stringify(createdBook));
 })
 
